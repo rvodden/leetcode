@@ -11,47 +11,78 @@
 #define ROMAN_D 500
 #define ROMAN_M 1000
 
+#define ROMAN_IV 4
+#define ROMAN_IX 9
+#define ROMAN_XL 40
+#define ROMAN_XC 90
+#define ROMAN_CD 400
+#define ROMAN_CM 900
+
 namespace Solution {
 
-std::map<char, int> const chars{
-    {'I', ROMAN_I},
-    {'V', ROMAN_V},
-    {'X', ROMAN_X},
-    {'L', ROMAN_L},
-    {'C', ROMAN_C},
-    {'D', ROMAN_D},
-    {'M', ROMAN_M}
-};
+
 
 int Solution::romanToInt(string s) {
   int value = 0;
 
-  string::const_iterator chr = s.cbegin();
-  string::const_iterator nchr = std::next(chr);
+  char* chr = s.data();
 
   do {
-    const int& val = chars.at(*chr);
-
-    if(nchr == s.end()) {
-      value += val;
-      break;
+    switch(*chr) {
+      case 'I':
+        if (*(chr + 1) == 'V') {
+          value += ROMAN_IV;
+          chr++;
+          break;
+        }
+        if (*(chr + 1) == 'X') {
+          value += ROMAN_IX;
+          chr++;
+          break;
+        }
+        value += ROMAN_I;
+        break;
+      case 'V':
+        value += ROMAN_V;
+        break;
+      case 'X':
+        if (*(chr + 1) == 'L') {
+          value += ROMAN_XL;
+          chr++;
+          break;
+        }
+        if (*(chr + 1) == 'C') {
+          value += ROMAN_XC;
+          chr++;
+          break;
+        }
+        value += ROMAN_X;
+        break;
+      case 'L':
+        value += ROMAN_L;
+        break;
+      case 'C':
+        if (*(chr + 1) == 'D') {
+          value += ROMAN_CD;
+          chr++;
+          break;
+        }
+        if (*(chr + 1) == 'M') {
+          value += ROMAN_CM;
+          chr++;
+          break;
+        }
+        value += ROMAN_C;
+        break;
+      case 'D':
+        value += ROMAN_D;
+        break;
+      case 'M':
+        value += ROMAN_M;
+        break;
     }
-
-    const int& nval = chars.at(*nchr);
-
-    if(val < nval) {
-      value += (nval - val);
-      if ( (&(*s.end()) - &(*chr)) > 2) {
-        std::advance(chr, 2);
-        std::advance(nchr, 2);
-        continue;
-      }
-      break;
-    }
-
-    value += chars.at(*chr);
-    chr++; nchr++;
-  } while (chr != s.cend());
+    chr++;
+  } while (*chr != '\0');
 
   return value;
 }
