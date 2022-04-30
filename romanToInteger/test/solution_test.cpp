@@ -30,7 +30,7 @@ TEST_P(RomanToIntegerTest, romanToInt) {
   EXPECT_THAT(solution.romanToInt(roman_string), Eq(expected_result));
 }
 
-INSTANTIATE_TEST_SUITE_P(MazeTest, RomanToIntegerTest, testing::Values(
+INSTANTIATE_TEST_SUITE_P(SolutionTest, RomanToIntegerTest, testing::Values(
     roman_to_int_t({"I"}, 1),
     roman_to_int_t({"III", 3}),
     roman_to_int_t({"LVIII", 58}),

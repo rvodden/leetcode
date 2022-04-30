@@ -1,0 +1,84 @@
+{
+    "version": 4,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Debug build using Ninja generator",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/cmake-build-${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${binaryDir}/out/",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+            }
+        },
+        {
+            "inherits": "default",
+            "name": "address_sanitizer",
+            "displayName": "Address Sanitizer",
+            "description": "Debug build using Ninja generator and the Address Sanitizer",
+            "cacheVariables": {
+                "USE_SANITIZER": "address"
+            }
+        },
+        {
+            "inherits": "default",
+            "name": "leak_sanitizer",
+            "displayName": "Leak Sanitizer",
+            "description": "Debug build using Ninja generator and the Leak Sanitizer",
+            "cacheVariables": {
+                "USE_SANITIZER": "leak"
+            }
+        },
+        {
+            "inherits": "default",
+            "name": "memory_sanitizer",
+            "displayName": "Memory Sanitizer",
+            "description": "Debug build using Ninja generator and the Memory Sanitizer",
+            "cacheVariables": {
+                "USE_SANITIZER": "memory"
+            }
+        },
+        {
+            "inherits": "default",
+            "name": "thread_sanitizer",
+            "displayName": "Thread Sanitizer",
+            "description": "Debug build using Ninja generator and the Thread Sanitizer",
+            "cacheVariables": {
+                "USE_SANITIZER": "thread"
+            }
+        },
+        {
+            "inherits": "default",
+            "name": "undefined_sanitizer",
+            "displayName": "Undefined Sanitizer",
+            "description": "Debug build using Ninja generator and the Undefined Sanitizer",
+            "cacheVariables": {
+                "USE_SANITIZER": "undefined"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "displayName": "Default Build",
+            "description": "A default build which adds no options to the build process.",
+            "configurePreset": "default"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default",
+            "displayName": "Default Test",
+            "description": "A default build which adds no options to the build process.",
+            "configurePreset": "default"
+        }
+    ]
+}
