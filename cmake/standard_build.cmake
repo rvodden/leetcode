@@ -16,6 +16,8 @@ macro(standard_build LibraryName)
     string(TOUPPER ${LibraryName} UpperLibraryName)
     target_compile_definitions(${LibraryName} PRIVATE "EXPORTING_${UpperLibraryName}")
 
+    set_property(TARGET ${LibraryName} PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
+
     file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test/*.h)
     foreach(SOURCE_FILE ${SOURCE_FILES})
         message("   Adding test source file: ${SOURCE_FILE}")

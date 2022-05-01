@@ -14,6 +14,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 
+### Find Dependencies ###
+
+find_program(iwyu_path NAMES include-what-you-use iwyu REQUIRED)
+
 ### Define Options ###
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
