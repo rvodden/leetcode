@@ -4,61 +4,70 @@ namespace Solution {
 
 bool Solution::isPalindrome(ListNode *head) {
 
-  /* calculate the number of elements
-   * and find the last row
+  /**
+   * To check for palindromes we need to compare the
+   * first element with the last element
+   * then the first but on element with the last but one
+   * 
+   * etc..
+   * 
+   * However with a singly linked list we can only go
+   * in one direction.
+   * 
+   * We will therefore set about reversing the order of the 
+   * list so that we can go backwards. Whilst we're doing 
+   * that we'll set a pointer off twice as fast as the reversal
+   * process. When that pointer hits the end, our reversal will be 
+   * half way. We can then set about comparing.
    */
-  int number_of_elements = 1;
-  ListNode* tail = head;
-  while(tail->next != nullptr) {
-    tail = tail->next;
-    number_of_elements++;
+
+  ListNode* prev = nullptr;
+  ListNode* next = nullptr;
+  ListNode* slow = head;
+  ListNode* fast = head->next;
+
+  while(fast && fast->next){
+      // reverse the list at "slow"
+      next = slow->next;
+      slow->next = prev;
+      prev = slow;
+      slow = next;
+
+      // double increment fast
+      fast = fast->next->next;
+  }
+  
+  /* if fast gets to the penultimate element
+   * then we have an odd number of elements in our 
+   * list. We need to point slow at the element before the middle 
+   * and fast at the element after.
+   */
+  if(fast && !fast->next){
+      next = slow->next;
+      slow->next = prev;
+      fast = next;
   }
 
-  switch (number_of_elements) {
-    case 1:
-      return true;
-    case 2:
-      return (head->val == head->next->val);
-    case 3:
-      return (head->val == head->next->next->val);
+  /* if fast gets to the end then we have an even number of
+   * elements in our list. So we point slow at the middle
+   * and fast at the element after */
+  if(!fast){
+      fast = slow->next;
+      slow = prev;
   }
-
-  int middle_element_index = number_of_elements / 2;
-  ListNode* prev;
-  tail = head;
-
-  for ( int current_index = 0; current_index < middle_element_index; current_index++) {
-    prev = tail;
-    tail = tail->next;
-  }
-  ListNode* next;
-
-  // snap off the tail from the rest of the ListNode:
-  prev->next = nullptr;
-  prev = tail;
-  tail = tail->next;
-  prev->next = nullptr;
-  next = tail->next;
-
-  // reverse the order of tail
-  while(next != nullptr) {
-    tail->next = prev;
-    prev = tail;
-    tail = next;
-    next = next->next;
-  }
-  tail->next = prev;
-
-  // check for palindromeness
-
-  while(tail != nullptr and head != nullptr) {
-    if (tail->val != head->val)  return false;
-    
-    head = head->next;
-    tail = tail->next;
+  
+  /* now simply compare and see if we have a palindrome */
+  while(slow){
+      if(slow->val != fast->val)
+          return false;
+      slow = slow->next;
+      fast = fast->next;
   }
 
   return true;
+
 }
+
+
 
 } // namespace Solution
