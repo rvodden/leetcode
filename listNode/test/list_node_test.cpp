@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "solution.h"
+#include "list_node.h"
 
 namespace SolutionTest {
 

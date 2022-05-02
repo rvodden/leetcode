@@ -32,6 +32,7 @@ macro(standard_build)
 
     gtest_discover_tests(${TestName} XML_OUTPUT_DIR report EXTRA_ARGS --gtest_catch_exceptions=0)
     message(CHECK_PASS "done.")
+    set(LibraryName ${LibraryName} PARENT_SCOPE)
 endmacro()
 
 list( APPEND skip_directories cmake-* )

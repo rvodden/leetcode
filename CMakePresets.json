@@ -11,7 +11,7 @@
             "displayName": "Default Config",
             "description": "Debug build using Ninja generator",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/cmake-build-${presetName}",
+            "binaryDir": "${sourceDir}/cmake-build-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_INSTALL_PREFIX": "${binaryDir}/out/",

@@ -1,5 +1,6 @@
-#include "solution.h"
+#include "list_node.h"
 #include <iostream>
+#include <sstream>
 
 namespace Solution {
 
@@ -47,21 +48,27 @@ ListNode& ListNode::operator=(ListNode&& other) noexcept {
   return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, ListNode const* const node) {
-  const ListNode* curr = node;
+std::string ListNode::to_string() const {
+  std::stringstream ss;
+  const ListNode* curr = this;
   bool first = true;
-  os << "{";
+  ss << "{";
   while(curr != nullptr) {
     if(!first) {
-      os << ",";
+      ss << ",";
     } else {
       first = false;
     };
 
-    os << curr->val;
+    ss << curr->val;
     curr = curr->next;
   }
-  os << "}";
+  ss << "}";
+  return ss.str();
+}
+
+std::ostream& operator<<(std::ostream& os, ListNode const* const node) {
+  os << node->to_string();
   return os;
 }
 
