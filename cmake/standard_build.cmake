@@ -1,5 +1,8 @@
 
 macro(standard_build)
+
+    ## Library Build
+
     get_filename_component(LibraryName ${CMAKE_CURRENT_SOURCE_DIR} NAME)    
     message(CHECK_START "Loading ${LibraryName}...")
     include(GoogleTest)
@@ -19,6 +22,15 @@ macro(standard_build)
 
     set_property(TARGET ${LibraryName} PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
 
+ 
+    ## Documentation Build
+
+    set(DocName "${LibraryName}_docs")
+
+    doxygen_add_docs(${DocName} ${SOURCE_FILES})
+        
+    ## Test Build
+
     file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test/*.h)
     foreach(SOURCE_FILE ${SOURCE_FILES})
         message("   Adding test source file: ${SOURCE_FILE}")
@@ -32,7 +44,9 @@ macro(standard_build)
 
     gtest_discover_tests(${TestName} XML_OUTPUT_DIR report EXTRA_ARGS --gtest_catch_exceptions=0)
     message(CHECK_PASS "done.")
+
     set(LibraryName ${LibraryName} PARENT_SCOPE)
+
 endmacro()
 
 list( APPEND skip_directories cmake-* )

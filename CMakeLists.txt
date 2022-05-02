@@ -46,6 +46,28 @@ elseif (USE_SANITIZER STREQUAL "Undefined")
     target_compile_options(compiler_flags, "-fsanitize=undefined")
 endif()
 
+### Documentation
+
+find_package(Doxygen REQUIRED dot)
+
+if (DOXYGEN_FOUND)
+    # set input and output files
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    # request to configure the file
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    set(DocName "docs")
+
+    # note the option ALL which allows to build the docs together with the application
+    add_custom_target( ${DocName}
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM )
+endif (DOXYGEN_FOUND)
+
 ### Subdirectories ###
 
 subdir_list(SUBDIRS ${MY_CURRENT_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
