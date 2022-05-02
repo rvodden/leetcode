@@ -1,1 +1,1 @@
-standard_build(romanToInteger)
+standard_build()

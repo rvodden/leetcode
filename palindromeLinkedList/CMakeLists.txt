@@ -1,1 +1,1 @@
-standard_build(palindromeLinkedList)
+standard_build()

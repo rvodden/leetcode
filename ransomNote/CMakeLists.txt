@@ -1,1 +1,1 @@
-standard_build(ransomNote)
+standard_build()

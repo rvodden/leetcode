@@ -1,5 +1,6 @@
 
-macro(standard_build LibraryName)
+macro(standard_build)
+    get_filename_component(LibraryName ${CMAKE_CURRENT_SOURCE_DIR} NAME)    
     message(CHECK_START "Loading ${LibraryName}...")
     include(GoogleTest)
 
