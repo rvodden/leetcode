@@ -3,15 +3,14 @@
 namespace Solution {
 
 ListNode* Solution::middleNode(ListNode* head) {
-    ListNode* fast = head->next;
+    ListNode* fast = head;
 
-    while (fast != nullptr and fast->next != nullptr) {
+
+    while(true) {
+        if(fast == nullptr) break;
+        if(fast->next == nullptr) break;
         head = head->next;
         fast = fast->next->next;
-    }
-
-    if(fast != nullptr) {
-        return head->next;
     }
 
     return head;

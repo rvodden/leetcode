@@ -1,13 +1,13 @@
 
+include(GoogleTest)
+
 macro(standard_build)
 
     ## Library Build
 
     get_filename_component(LibraryName ${CMAKE_CURRENT_SOURCE_DIR} NAME)    
+    
     message(CHECK_START "Loading ${LibraryName}...")
-    include(GoogleTest)
-
-    set(TestName "${LibraryName}_test")
 
     file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
     foreach(SOURCE_FILE ${SOURCE_FILES})
@@ -26,26 +26,39 @@ macro(standard_build)
     ## Documentation Build
 
     set(DocName "${LibraryName}_docs")
-
+    
     doxygen_add_docs(${DocName} ${SOURCE_FILES})
         
     ## Test Build
 
-    file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test/*.h)
-    foreach(SOURCE_FILE ${SOURCE_FILES})
+    set(TestName "${LibraryName}_test")
+    
+    file(GLOB_RECURSE TEST_SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/test/*.h)
+    foreach(SOURCE_FILE ${TEST_SOURCE_FILES})
         message("   Adding test source file: ${SOURCE_FILE}")
     endforeach()
-    add_executable(${TestName} ${SOURCE_FILES})
+    add_executable(${TestName} ${TEST_SOURCE_FILES})
 
     target_link_libraries(${TestName} PRIVATE compiler_flags)
     target_link_libraries(${TestName} PUBLIC ${LibraryName})
+    target_link_libraries(${TestName} PUBLIC gtest)
+    target_link_libraries(${TestName} PUBLIC gmock)
     target_link_libraries(${TestName} PUBLIC gtest_main)
-    target_link_libraries(${TestName} PUBLIC gmock_main)
 
     gtest_discover_tests(${TestName} XML_OUTPUT_DIR report EXTRA_ARGS --gtest_catch_exceptions=0)
     message(CHECK_PASS "done.")
 
     set(LibraryName ${LibraryName} PARENT_SCOPE)
+
+    ## Benchmark Build
+
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bench)
+        set(BenchName "${LibraryName}_bench")
+        file(GLOB_RECURSE BENCH_SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/bench/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/bench/*.h)
+        add_executable(${BenchName} ${BENCH_SOURCE_FILES})
+        target_link_libraries(${BenchName} PUBLIC ${LibraryName})
+        target_link_libraries(${BenchName} PUBLIC benchmark)
+    endif()
 
 endmacro()
 

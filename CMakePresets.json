@@ -14,7 +14,7 @@
             "binaryDir": "${sourceDir}/cmake-build-debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_INSTALL_PREFIX": "${binaryDir}/out/",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/cmake-build-debug/out/",
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
             }
@@ -70,7 +70,15 @@
             "name": "default",
             "displayName": "Default Build",
             "description": "A default build which adds no options to the build process.",
-            "configurePreset": "default"
+            "configurePreset": "default",
+            "targets": ["all"]
+        },
+        {
+            "name": "rebuild",
+            "displayName": "ReBuild",
+            "description": "Cleans the build directory and then builds all",
+            "configurePreset": "default",
+            "targets": ["clean", "all"]
         }
     ],
     "testPresets": [
