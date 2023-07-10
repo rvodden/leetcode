@@ -1,6 +1,7 @@
 #ifndef LISTNODE_H
 #define LISTNODE_H
 
+#include <string>
 #include <initializer_list>
 #include <utility>
 

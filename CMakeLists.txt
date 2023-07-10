@@ -12,7 +12,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
-set(CMAKE_CXX_CLANG_TIDY clang-tidy)
+# set(CMAKE_CXX_CLANG_TIDY clang-tidy)
 
 ### Find Dependencies ###
 
@@ -30,7 +30,9 @@ target_compile_features(compiler_flags INTERFACE cxx_std_17)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 target_compile_options(compiler_flags INTERFACE
-        "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused;-fdiagnostics-color=always;-O0>>"
+        "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused;-fdiagnostics-color=always;>>"
+        "$<$<AND:${gcc_like_cxx},$<CONFIG:Debug>>:$<BUILD_INTERFACE:-O0;>>"
+        "$<$<AND:${gcc_like_cxx},$<CONFIG:Release>>:$<BUILD_INTERFACE:-O3;>>"
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-W3>>"
         )
 
@@ -39,9 +41,9 @@ if (USE_SANITIZER STREQUAL "Address")
 elseif (USE_SANITIZER STREQUAL "Thread")
     target_compile_options(compiler_flags, "-fsanitize=thread")
 elseif (USE_SANITIZER STREQUAL "Leak")
-     target_compile_options(compiler_flags, "-fsanitize=leak")
+    target_compile_options(compiler_flags, "-fsanitize=leak")
 elseif (USE_SANITIZER STREQUAL "Memory")
-     target_compile_options(compiler_flags, "-fsanitize=memory")
+    target_compile_options(compiler_flags, "-fsanitize=memory")
 elseif (USE_SANITIZER STREQUAL "Undefined")
     target_compile_options(compiler_flags, "-fsanitize=undefined")
 endif()
@@ -71,8 +73,11 @@ endif (DOXYGEN_FOUND)
 ### Subdirectories ###
 
 subdir_list(SUBDIRS ${MY_CURRENT_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+set(exclude_subdirs report cmake vscode)
 foreach(subdir ${SUBDIRS})
-    add_subdirectory(${subdir})
+    if(NOT (${subdir} IN_LIST exclude_subdirs))
+        add_subdirectory(${subdir})
+    endif()
 endforeach()
 
 ### Macros (Move to another file, or maybe even another project?)

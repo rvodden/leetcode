@@ -57,7 +57,7 @@ macro(standard_build)
         file(GLOB_RECURSE BENCH_SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/bench/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/bench/*.h)
         add_executable(${BenchName} ${BENCH_SOURCE_FILES})
         target_link_libraries(${BenchName} PUBLIC ${LibraryName})
-        target_link_libraries(${BenchName} PUBLIC benchmark)
+        target_link_libraries(${BenchName} PRIVATE benchmark::benchmark_main)
     endif()
 
 endmacro()

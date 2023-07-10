@@ -1,89 +1,106 @@
 {
-    "version": 4,
+    "version": 6,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 23,
+        "minor": 21,
         "patch": 0
     },
     "configurePresets": [
         {
-            "name": "default",
-            "displayName": "Default Config",
-            "description": "Debug build using Ninja generator",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/cmake-build-debug",
+            "name": "base",
+            "hidden": true,
+            "description": "Base configuration from which all else inherits",
+            "binaryDir": "${sourceDir}/cmake-build"
+        },
+        {
+            "name": "ninjamc",
+            "hidden": true,
+            "description": "Build using Ninja Multi-Config generator",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/cmake-build",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/cmake-build-debug/out/",
+                "CMAKE_CONFIGURATION_TYPES": "Release;Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/cmake-build/out/"
+            }
+        },
+        {
+            "name": "clang",
+            "hidden": true,
+            "description": "Build using clang",
+            "cacheVariables": {
                 "CMAKE_C_COMPILER": "/usr/bin/clang",
                 "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
             }
         },
         {
-            "inherits": "default",
-            "name": "address_sanitizer",
-            "displayName": "Address Sanitizer",
-            "description": "Debug build using Ninja generator and the Address Sanitizer",
+            "name": "gcc12",
+            "hidden": true,
+            "description": "Build using clang",
             "cacheVariables": {
-                "USE_SANITIZER": "address"
+                "CMAKE_C_COMPILER": "/usr/bin/gcc-12",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++-12"
             }
         },
         {
-            "inherits": "default",
-            "name": "leak_sanitizer",
-            "displayName": "Leak Sanitizer",
-            "description": "Debug build using Ninja generator and the Leak Sanitizer",
-            "cacheVariables": {
-                "USE_SANITIZER": "leak"
-            }
+            "name": "ninjamc-gcc12",
+            "hidden": false,
+            "displayName": "Ninja Multi-Config GCC12",
+            "description": "Configure using Ninja Multi-Config and GCC Version 12",
+            "inherits": ["ninjamc","gcc12"]
         },
         {
-            "inherits": "default",
-            "name": "memory_sanitizer",
-            "displayName": "Memory Sanitizer",
-            "description": "Debug build using Ninja generator and the Memory Sanitizer",
-            "cacheVariables": {
-                "USE_SANITIZER": "memory"
-            }
-        },
-        {
-            "inherits": "default",
-            "name": "thread_sanitizer",
-            "displayName": "Thread Sanitizer",
-            "description": "Debug build using Ninja generator and the Thread Sanitizer",
-            "cacheVariables": {
-                "USE_SANITIZER": "thread"
-            }
-        },
-        {
-            "inherits": "default",
-            "name": "undefined_sanitizer",
-            "displayName": "Undefined Sanitizer",
-            "description": "Debug build using Ninja generator and the Undefined Sanitizer",
-            "cacheVariables": {
-                "USE_SANITIZER": "undefined"
-            }
+            "name": "ninjamc-clang",
+            "hidden": false,
+            "displayName": "Ninja Multi-Config Clang",
+            "description": "Configure using Ninja Multi-Config and Clang",
+            "inherits": ["ninjamc","clang"]
         }
     ],
     "buildPresets": [
         {
-            "name": "default",
-            "displayName": "Default Build",
-            "description": "A default build which adds no options to the build process.",
-            "configurePreset": "default",
-            "targets": ["all"]
+            "name": "ninjamc-gcc12-release",
+            "displayName": "Release",
+            "description": "Build all targets with release configuration.",
+            "configurePreset": "ninjamc-gcc12",
+            "configuration": "Release",
+            "targets": [
+                "all"
+            ]
         },
         {
-            "name": "rebuild",
-            "displayName": "ReBuild",
-            "description": "Cleans the build directory and then builds all",
-            "configurePreset": "default",
-            "targets": ["clean", "all"]
+            "name": "ninjamc-gcc12-debug",
+            "displayName": "Debug",
+            "description": "Build all targets with release configuration.",
+            "configurePreset": "ninjamc-gcc12",
+            "configuration": "Debug",
+            "targets": [
+                "all"
+            ]
+        },
+        {
+            "name": "ninjamc-clang-release",
+            "displayName": "Release",
+            "description": "Build all targets with release configuration.",
+            "configurePreset": "ninjamc-clang",
+            "configuration": "Release",
+            "targets": [
+                "all"
+            ]
+        },
+        {
+            "name": "ninjamc-clang-debug",
+            "displayName": "Debug",
+            "description": "Build all targets with release configuration.",
+            "configurePreset": "ninjamc-clang",
+            "configuration": "Debug",
+            "targets": [
+                "all"
+            ]
         }
     ],
     "testPresets": [
         {
-            "name": "default",
+            "name": "debug",
             "displayName": "Default Test",
             "description": "A default build which adds no options to the build process.",
             "configurePreset": "default"

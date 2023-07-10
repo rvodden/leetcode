@@ -1,5 +1,6 @@
 #include "k_weakest_rows.h"
 
+#include <array>
 #include <limits>
 #include <iostream>
 
